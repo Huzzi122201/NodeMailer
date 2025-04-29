@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Sender</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 600px;
+            backdrop-filter: blur(10px);
+            transform: translateY(0);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        h1 {
+            color: #2d3748;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.2em;
+            font-weight: 600;
+            position: relative;
+            padding-bottom: 15px;
+        }
+
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(to right, #667eea, #764ba2);
+            border-radius: 2px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .form-group i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #764ba2;
+            font-size: 1.2em;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #4a5568;
+            font-weight: 500;
+            font-size: 0.95em;
+        }
+
+        input[type="email"],
+        input[type="text"],
+        textarea {
+            width: 100%;
+            padding: 12px 20px 12px 45px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+            background: white;
+        }
+
+        input:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        textarea {
+            height: 150px;
+            resize: vertical;
+            padding-left: 20px;
+        }
+
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1.1em;
+            font-weight: 500;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 7px 14px rgba(0, 0, 0, 0.1);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .alert {
+            padding: 15px 20px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            position: relative;
+            padding-left: 45px;
+            font-size: 0.95em;
+        }
+
+        .alert::before {
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .alert-success {
+            background-color: #c6f6d5;
+            color: #2f855a;
+            border: 1px solid #9ae6b4;
+        }
+
+        .alert-success::before {
+            content: "\f00c";
+        }
+
+        .alert-error {
+            background-color: #fed7d7;
+            color: #c53030;
+            border: 1px solid #feb2b2;
+        }
+
+        .alert-error::before {
+            content: "\f071";
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 1.8em;
+            }
+
+            button {
+                padding: 12px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Send Email</h1>
+        
+        <% if (message && message.length > 0) { %>
+            <div class="alert alert-success">
+                <%= message %>
+            </div>
+        <% } %>
+        
+        <% if (error && error.length > 0) { %>
+            <div class="alert alert-error">
+                <%= error %>
+            </div>
+        <% } %>
+
+        <form action="/send" method="POST">
+            <div class="form-group">
+                <label for="to">Recipient Email</label>
+                <i class="fas fa-envelope"></i>
+                <input type="email" id="to" name="to" required placeholder="Enter recipient's email">
+            </div>
+
+            <div class="form-group">
+                <label for="subject">Subject</label>
+                <i class="fas fa-heading"></i>
+                <input type="text" id="subject" name="subject" required placeholder="Enter email subject">
+            </div>
+
+            <div class="form-group">
+                <label for="text">Message</label>
+                <textarea id="text" name="text" required placeholder="Type your message here..."></textarea>
+            </div>
+
+            <button type="submit">
+                <i class="fas fa-paper-plane"></i> Send Email
+            </button>
+        </form>
+    </div>
+</body>
+</html> 
